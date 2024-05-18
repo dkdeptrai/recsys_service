@@ -4,7 +4,7 @@ from data_processing import load_data
 
 df, final_similarity = load_data()
 
-def recommend_shoes(shoe_id, sim_matrix=final_similarity, num_recommendations=10, least_similar=False):
+def recommend_shoes(shoe_id, num_recommendations=10, sim_matrix=final_similarity, least_similar=False):
     """
     Recommend shoes based on the similarity matrix.
     
@@ -32,3 +32,20 @@ def recommend_shoes(shoe_id, sim_matrix=final_similarity, num_recommendations=10
     shoe_recommendations = [{'asin': df['asin'].iloc[i[0]], 'score': i[1]} for i in sim_scores]
     
     return shoe_recommendations
+
+def recommend_from_last_viewed_items(shoes_ids, num_recommendations_each = 2):
+    """
+    Recommend shoes based on the similarity matrix.
+    
+    Parameters:
+    - shoes_ids: The IDs of the shoes the user has viewed.
+    - num_recommendations_each: The number of recommendations to return for each shoe.
+    
+    Returns:
+    - A list of recommended shoes, each represented as a dictionary with 'asin' and 'score' keys.
+    """
+    recommendations = []
+    for shoe_id in shoes_ids:
+        recommendations += recommend_shoes(shoe_id, num_recommendations=num_recommendations_each)
+    
+    return recommendations
