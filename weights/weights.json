@@ -1,0 +1,10 @@
+{
+    "Categories_bin": 0.3,
+    "OuterMaterial_bin": 0.05,
+    "InnerMaterial_bin": 0.05,
+    "Sole_bin": 0.1,
+    "Closure_bin": 0.1,
+    "HeelType_bin": 0.1,
+    "ShoeWidth_bin": 0.1,
+    "Brand_bin": 0.2
+}

@@ -1,6 +1,7 @@
 
 from utils import get_index
 from data_processing import load_data
+import json
 
 df, final_similarity = load_data()
 

@@ -2,7 +2,16 @@ import pandas as pd
 import numpy as np
 import ast
 from sklearn.metrics.pairwise import cosine_similarity
+import json
 from utils import binary
+
+def load_weights_from_file():
+    """
+    Load the weights from a JSON file.
+    """
+    with open('weights/weights.json', 'r') as f:
+        weights = json.load(f)
+    return weights
 
 def load_data():
     """
@@ -74,7 +83,8 @@ def load_data():
         similarity_matrices[category_names[i]] = cosine_sim
     
     # Apply weights to the similarity matrices
-    weights = {'Categories_bin': 0.2, 'OuterMaterial_bin': 0.1, 'InnerMaterial_bin': 0.1, 'Sole_bin': 0.1, 'Closure_bin': 0.1, 'HeelType_bin': 0.1, 'ShoeWidth_bin': 0.1, 'Brand_bin': 0.2}
+    weights = load_weights_from_file()
+
     final_similarity = np.zeros((len(df), len(df)))
     
     for category, weight in weights.items():
