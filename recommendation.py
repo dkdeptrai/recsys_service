@@ -5,7 +5,7 @@ import json
 
 df, final_similarity = load_data()
 
-def recommend_shoes(shoe_id, num_recommendations=10, sim_matrix=final_similarity, least_similar=False, page = 1, page_size = 10, get_all = False):
+def recommend_similar_shoes(shoe_id, num_recommendations=10, sim_matrix=final_similarity, least_similar=False, page = 1, page_size = 10, get_all = False):
     """
     
     Parameters:
@@ -59,7 +59,7 @@ def recommend_from_last_viewed_items(shoes_ids, page=1, page_size=10):
     """
     recommendations = []
     for shoe_id in shoes_ids:
-        recs = recommend_shoes(shoe_id, get_all=True)
+        recs = recommend_similar_shoes(shoe_id, get_all=True)
         recommendations.extend(recs)
     
     # Sort the recommendations based on the similarity score
@@ -83,3 +83,4 @@ def recommend_from_last_viewed_items(shoes_ids, page=1, page_size=10):
     shoe_recommendations = [{'asin': df['asin'].iloc[i[0]], 'score': i[1]} for i in unique_recommendations]
     
     return shoe_recommendations, total_pages
+

@@ -1,3 +1,4 @@
-*.DS_Store
-__pycache__
-Data/temp
+.DS_Store
+Data/.DS_Store
+__pycache__/
+Data/temp/

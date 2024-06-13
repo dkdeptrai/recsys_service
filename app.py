@@ -3,6 +3,7 @@ import json
 from flask_cors import CORS
 import recommendation
 import data_processing
+import cf_data_processing
 import importlib
 
 app = Flask(__name__)
@@ -20,7 +21,7 @@ def recommend():
     page_size = data['page_size'] if 'page_size' in data else 10
 
     num_of_recommendations = data['num_of_recommendations'] if 'num_of_recommendations' in data else 10
-    recommendations, total_pages = recommendation.recommend_shoes(shoe_id, num_recommendations=num_of_recommendations, page = page, page_size = page_size)
+    recommendations, total_pages = recommendation.recommend_similar_shoes(shoe_id, num_recommendations=num_of_recommendations, page = page, page_size = page_size)
     
     return jsonify({"recommendations": recommendations, "total_pages": total_pages})
 
@@ -37,6 +38,22 @@ def recommend_from_last_viewed():
     
     return jsonify({"recommendations": recommendations, "total_pages": total_pages})
 
+@app.route('/recommend_from_prediction', methods=['POST'])
+def recommend_from_prediction():
+    """
+    Endpoint to recommend shoes based on a user's predicted ratings.
+    """
+    print("Recommend from prediction")
+    data = request.get_json()
+    user_id = data['user_id']
+    page = data['page'] if 'page' in data else 1
+    page_size = data['page_size'] if 'page_size' in data else 10
+    recommendations, total_pages = cf_data_processing.pred_ranking_based_recommendation(user_id, page=page, page_size=page_size)
+    
+    return jsonify({"recommendations": [(shoe_id, str(score)) for shoe_id, score in recommendations], "total_pages": total_pages})
+
+
+
 @app.route('/save_weights', methods=['POST'])
 def save_weights():
     weights = request.get_json()
@@ -45,7 +62,6 @@ def save_weights():
     # Reload recommendation and data_processing modules
     importlib.reload(recommendation)
     importlib.reload(data_processing)
-    
     
     return jsonify({"message": "Weights saved successfully."})
 
